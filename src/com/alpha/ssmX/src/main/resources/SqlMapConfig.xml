@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE configuration
+                PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+
+
+    <!--
+      别名
+      typeAlias：单个定义别名
+      package:批量配置别名，使用类名作为别名 ，不区分大小写
+      mybtias内置别名：
+    -->
+    <typeAliases>
+       <!--<typeAlias type="com.demo.po.User" alias="user"></typeAlias>-->
+       <package name="com.ssm.po"/>
+    </typeAliases>
+
+</configuration>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <properties resource="resources/jdbc.properties"/>
+
+    <typeAliases>
+        <typeAlias type="com.alpha.spring.entity" alias="employee"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC">
+                <dataSource type="POOLED">
+                    <property name="driver" value="${jdbc.Driver}"/>
+                    <property name="url" value="${jdbcUrl}"/>
+                    <property name="username" value="${username}"/>
+                    <property name="password" value="${password}"/>
+                </dataSource>
+            </transactionManager>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/alpha/mapper"/>
+    </mappers>
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+            <property name="offsetAsPageNum" value="true"/>
+            <property name="rowBoundsWithCount" value="true"/>
+            <property name="pageSizeZero" value="true"/>
+            <property name="reasonable" value="false"/>
+            <property name="params" value="pageNum=pageHelperStart;pageSize=pageHelperRows;"/>
+            <property name="supportMethodsArguments" value="false"/>
+            <property name="returnPageInfo" value="none"/>
+        </plugin>
+    </plugins>
+</configuration>

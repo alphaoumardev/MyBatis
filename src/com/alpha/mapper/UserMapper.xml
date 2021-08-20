@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alpha.dao">
+
+    <resultMap id="result" type="user">
+        <id property="id" column="id"/>
+        <result column="fullname" property="fullname"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <result column="mobile" property="mobile"/>
+        <result column="country" property="country"/>
+        <result column="address" property="address"/>
+    </resultMap>
+
+    <insert id="insertUser" parameterType="entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (id,fullname,email,gender,mobile,country,address) values
+        (#{id},${fullname},#{email},#{gender},#{mobile},#{country},#{address})
+    </insert>
+
+    <select id="getAllEmployees" resultType="employee" resultMap="result">
+        select  * from user
+    </select>
+    <update id="updateUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        update user set
+            fullname=#{fullname},
+            email=#{email},
+            gender=#{gender},
+            mobile=#{mobile},
+            country=#{country},
+            address=#{address}
+        where id =#{id}
+    </update>
+    <select id="selectUserById" resultType="User">
+        select <include refid="userColumn"/>
+        from user where fullname=#{0} and country=#{1}
+    </select>
+
+    <select id="selectByParam" resultType="User">
+        select <include refid="userColumn"/>
+        from user where fullname=#{fullname} and country=#{country}
+    </select>
+    <select id="selectUser" parameterType="User" resultType="User">
+        select <include refid="userColumn"/>
+        from user where fullname=#{fullname} and country=#{country}
+    </select>
+<!--    if-->
+    <select id="selectByif" resultType="User"  >
+        select from user where 1=1 
+        <if test="fullname!=null and fullname!=''">
+            and fullname=#{fullname}
+        </if>
+        <if test="country!=null and country!=''">
+            and country =#{country}
+        </if>
+    </select>
+<!--    choose-->
+    <select id="selectByChoose" resultType="User" parameterType="User" >
+        select fullname ,country from user where
+       <choose>
+           <when test="fullname != null and fullname != ''">
+               fullname=#{fullname}
+           </when>
+          <when test="country!=null and country!=''">
+              country=#{country}
+          </when>
+          <otherwise>1=1</otherwise>
+       </choose>
+    </select>
+<!--    where-->
+    <select id="selectByWhere" resultType="User" parameterType="User">
+        select fullname, country from user
+        <where>
+            <if test="fullname!=null and fullname!=''">
+                and fullname=#{fullname}
+            </if>
+            <if test="country!=null and country!=''">
+                and country =#{country}
+            </if>
+        </where>
+    </select>
+<!--    update set-->
+    <update id="updateUser"  parameterType="User">
+        update user
+        <set>
+            <if test="fullname!=null and fullname!=''">
+                fullname=#{fullname},
+            </if>
+            <if test="country!=null and country!=''">
+                country =#{country},
+            </if>
+        </set>
+    </update>
+<!--    trim-->
+    <select id="selectByWhere" resultType="User" parameterType="User">
+        select fullname, country from user
+        <trim  suffix="where" prefixOverrides="and|or" suffixOverrides="">
+            <if test="fullname!=null and fullname!=''">
+                and fullname=#{fullname}
+            </if>
+            <if test="country!=null and country!=''">
+                and country =#{country}
+            </if>
+        </trim>
+    </select>
+<!--    foreach-->
+    <select id="selectByWhere" resultType="User" parameterType="User">
+        select fullname, country from user where id in(1,2,3)
+        <foreach collection="where" item="" index="id" open=" " separator="" close="">
+            #{id}
+        </foreach>
+    </select>
+</mapper>
